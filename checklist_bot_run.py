@@ -1,36 +1,25 @@
+"""
+Run script to run the checklist bot
+Calling all the necessary functions to manage communication and
+logic of task list management from ddedicated modules
+"""
 import time
 import os
-import requests
-import re
+import checklist_bot_comm_functions as comm
+import checklist_bot_setenv as botenv
 
-# variables used throughout whole process
-BOT_TOKEN = os.environ.get('BOT_TOKEN')
+def main():
+    """
+    Running the bot (looping checking for updates and reply/react)
+    """
+    # variables used throughout whole process
+    botenv.checklist_bot_setenv()
+    bot_token = os.environ.get('BOT_TOKEN')
+    api_url = os.environ.get('CHAT_ID')
 
-#
-def checklist_bot_update_chats():
-    #TODO:
-    # - call update API function to get list of new messages to bot
-    update_command = ''
-    response = requests.get(update_command)
+    while True:
+        comm.checklist_bot_update_chats()
+        time.sleep(10)
 
-    return response.json() 
-
-
-def checklist_bot_build_reply_list(msg_list):
-    #TODO:
-    # - extract all valid commands from all messages to the bot and compile list of replies
-    for msg in msg_list:
-        re.search('', msg))
-
-def checklist_bot_respond():
-    #TODO:
-    # - go through list of active chats to reply to recent messages
-    reply_command = ''
-    response = requests.get(reply_command)
-
-    return response.json() 
-
-
-while True:
-    checklist_bot_update_chats()
-
+if __name__ == "__main__":
+    main()
