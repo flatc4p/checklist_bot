@@ -20,8 +20,10 @@ def checklist_bot_sendtext(message, chat_id):
     #TODO: support multiple chat ids
     send_text = os.environ.get('API_URL') + os.environ.get('BOT_TOKEN') \
     + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + message
-
-    response = requests.get(send_text, timeout=10)
+    try:
+        response = requests.get(send_text, timeout=10)
+    except TimeoutError:
+        print("Timeout occured during sending message to Telegram API")
 
     return response.json()
 
@@ -44,7 +46,10 @@ def checklist_bot_update_chats():
     else:
         print("No update id stored yet")
 
-    response = requests.get(update_command, timeout=3)
+    try:
+        response = requests.get(update_command, timeout=10)
+    except TimeoutError:
+        print("Timeout occured during reading updates from Telegram API")
     response_json = response.json()
     print('')
     print('')
@@ -77,7 +82,10 @@ def checklist_bot_respond():
     #TODO:
     # - go through list of active chats to reply to recent messages
     reply_command = ''
-    response = requests.get(reply_command, timeout=10)
+    try:
+        response = requests.get(reply_command, timeout=10)
+    except TimeoutError:
+        print("Timeout occured during sending response to Telegram API")
 
     return response.json()
 
