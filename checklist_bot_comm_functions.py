@@ -6,11 +6,6 @@ Receiving updates from telegram
 import os
 import re
 import requests
-import checklist_bot_setenv as botenv
-
-#globals
-#os.environ.get('BOT_TOKEN')
-#os.environ.get('API_URL')
 
 def checklist_bot_sendtext(message, chat_id):
     """
@@ -88,9 +83,3 @@ def checklist_bot_respond():
         print("Timeout occured during sending response to Telegram API")
 
     return response.json()
-
-#botenv.checklist_bot_setenv()
-#bot_token = os.environ.get('BOT_TOKEN')
-#api_url = os.environ.get('API_URL')
-#test = checklist_bot_sendtext("This is a test", os.environ.get('CHAT_ID'))
-#print(test)
