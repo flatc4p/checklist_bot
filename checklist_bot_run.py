@@ -18,7 +18,8 @@ def main():
     api_url = os.environ.get('CHAT_ID')
 
     while True:
-        comm.checklist_bot_update_chats()
+        messages = comm.checklist_bot_update_chats()
+        comm.checklist_bot_build_reply_list(messages)
         time.sleep(10)
 
 if __name__ == "__main__":

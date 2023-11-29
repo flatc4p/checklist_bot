@@ -47,9 +47,7 @@ def checklist_bot_update_chats():
         print("Timeout occured during reading updates from Telegram API")
     response_json = response.json()
     print('')
-    print('')
-    print(len(response_json['result']))
-    print('')
+    print("Received " + str(len(response_json['result'])) + " messages.")
     print('')
     if len(response_json['result']):
         print(response_json['result'][-1])
@@ -58,7 +56,6 @@ def checklist_bot_update_chats():
         print(response_json['result'][-1]['update_id'])
         update_id = response_json['result'][-1]['update_id']
         os.environ['UPDATE_ID'] = str(update_id)
-
     return response_json
 
 def checklist_bot_build_reply_list(msg_list):
@@ -68,7 +65,8 @@ def checklist_bot_build_reply_list(msg_list):
     #TODO:
     # - extract all valid commands from all messages to the bot and compile list of replies
     for msg in msg_list:
-        re.search('', msg)
+        print(msg)
+        #re.search('', msg)
 
 def checklist_bot_respond():
     """
