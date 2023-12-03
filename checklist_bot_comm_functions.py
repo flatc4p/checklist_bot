@@ -61,15 +61,29 @@ def checklist_bot_update_chats():
         os.environ['UPDATE_ID'] = str(update_id)
     return response_json['result']
 
-def checklist_bot_build_reply_list(msg_list):
+def checklist_bot_extract_messages(msg_list):
     """
-    Builds a list of actions and replies out of received messages
+    Extracts the neccessary information out of the API response for ease of further use
+    Builds a list of all messages to the bot containing the sender, message text and 
+    chat that was used (chat_id)
     """
-    #TODO:
-    # - extract all valid commands from all messages to the bot and compile list of replies
     for entry in msg_list:
         msg = entry['message']
         logging.debug("Message number %i: %s", msg['message_id'], msg['text'])
+        #extract only important message contents (who, where and what) in order to react to message
+        message = {
+            "sender": msg['from']['username'],
+            "message": msg['text'],
+            "chat_id": msg['from']['id']
+                   }
+        message_list.append(message)
+        logging.debug("Message added to list: %s", message)
+
+def checklist_bot_build_reply_list():
+    """
+    Uses simplified message list to parse for valid bot commands and act accordingly
+    """
+    #TODO: parse for commands and build reply list
 
 def checklist_bot_respond():
     """
