@@ -4,8 +4,12 @@ Sending messages to chats
 Receiving updates from telegram
 """
 import os
+import logging
 import re
 import requests
+
+message_list = []
+logging.basicConfig(filename='checklist_bot.log', encoding='utf-8', level=logging.DEBUG)
 
 def checklist_bot_sendtext(message, chat_id):
     """
@@ -18,7 +22,7 @@ def checklist_bot_sendtext(message, chat_id):
     try:
         response = requests.get(send_text, timeout=10)
     except TimeoutError:
-        print("Timeout occured during sending message to Telegram API")
+        logging.error("Timeout occured during sending message to Telegram API")
 
     return response.json()
 
@@ -33,30 +37,29 @@ def checklist_bot_update_chats():
     # - add error handling to avoid incorrect bot tokens
     update_command = os.environ.get('API_URL') + os.environ.get('BOT_TOKEN') + '/getUpdates'
     if os.environ.get('UPDATE_ID'):
-        print("Update ID found: ")
+        logging.debug("Update ID found: ")
         offset = int(os.environ.get('UPDATE_ID')) + 1
-        print(offset)
-        print("Offset calculated to: " + str(offset))
+        logging.debug(offset)
+        logging.debug("Offset calculated to: %s", str(offset))
         update_command = update_command + '?offset=' + str(offset)
     else:
-        print("No update id stored yet")
+        logging.debug("No update id stored yet")
 
     try:
         response = requests.get(update_command, timeout=10)
     except TimeoutError:
-        print("Timeout occured during reading updates from Telegram API")
+        logging.error("Timeout occured during reading updates from Telegram API")
     response_json = response.json()
-    print('')
-    print("Received " + str(len(response_json['result'])) + " messages.")
-    print('')
+    logging.debug('')
+    logging.debug("Received %i messages.", len(response_json['result']))
+    logging.debug('')
     if len(response_json['result']):
-        print(response_json['result'][-1])
-        print('')
-        print('')
-        print(response_json['result'][-1]['update_id'])
+        logging.debug(response_json['result'][-1])
+        logging.debug('')
+        logging.debug("Update ID: %i", (response_json['result'][-1]['update_id']))
         update_id = response_json['result'][-1]['update_id']
         os.environ['UPDATE_ID'] = str(update_id)
-    return response_json
+    return response_json['result']
 
 def checklist_bot_build_reply_list(msg_list):
     """
@@ -64,9 +67,9 @@ def checklist_bot_build_reply_list(msg_list):
     """
     #TODO:
     # - extract all valid commands from all messages to the bot and compile list of replies
-    for msg in msg_list:
-        print(msg)
-        #re.search('', msg)
+    for entry in msg_list:
+        msg = entry['message']
+        logging.debug("Message number %i: %s", msg['message_id'], msg['text'])
 
 def checklist_bot_respond():
     """
